@@ -1,8 +1,9 @@
+import { format } from "date-fns";
 
-function createTodo(title, description, notes){
+function createTodo(title, description, notes, dueDate){
   let todoTitle = title;
   let todoDescription = description;
-  let dueDate = '';
+  let todoDueDate = null;
   let priority = 0;
   let todoNotes = notes;
   let checklist = '';
@@ -19,8 +20,9 @@ function createTodo(title, description, notes){
   
 
 
-  const updateTodo = function(title, description, notes){
+  const updateTodo = function(title, dueDate, description, notes ){
     todoTitle = title;
+    todoDueDate = dueDate;
     todoDescription = description;
     todoNotes = notes;
   };
@@ -39,8 +41,16 @@ function createTodo(title, description, notes){
       get notes(){
         return todoNotes;
       }, 
-      updateTodo }
-
+      get dueDate(){
+        if(todoDueDate instanceof Date){
+          return format(todoDueDate, 'yyyy-MM-dd');
+        } else {
+          ""; 
+        }
+        
+      },
+      updateTodo 
+  }
 };
 
 

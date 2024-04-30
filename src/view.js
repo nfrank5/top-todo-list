@@ -1,5 +1,5 @@
 import { createList } from './lists';
-
+import { format } from "date-fns";
 
 
 const initialList = createList('Default list');
@@ -7,10 +7,10 @@ const anotherList = createList('Another list');
 
 // Dummie data
 let leche = initialList.addTodo("comprar leche");
-leche.updateTodo("comprar leche","En el kiosco de le esquina", "")
+leche.updateTodo("comprar leche",new Date(2014, 1, 11), "En el kiosco de le esquina", "" )
 initialList.addTodo("comprar pan");
 let agua = initialList.addTodo("comprar agua");
-agua.updateTodo("comprar agua","En el almacen","")
+agua.updateTodo("comprar agua","En el almacen","","")
 
 
 
@@ -62,6 +62,7 @@ function displayTodoDetails(list, todo){
   let dialog = document.querySelector("dialog");
   let confirmBtn = dialog.querySelector(".confirmBtn");
   let titleInput = dialog.querySelector("#title");
+  let dueDateInput = dialog.querySelector("#dueDate")
   let descriptionInput = dialog.querySelector("#description");
   let notesInput = dialog.querySelector("#notes");
   //let closeBtn = dialog.querySelector(".close");
@@ -69,7 +70,7 @@ function displayTodoDetails(list, todo){
   
 
   function saveUpdateTodo(e){
-    todo.updateTodo(titleInput.value, descriptionInput.value, notesInput.value )
+    todo.updateTodo(titleInput.value, new Date(dueDateInput.value), descriptionInput.value, notesInput.value )
     e.preventDefault();
     dialog.close();
     displayList(list);
@@ -81,9 +82,9 @@ function displayTodoDetails(list, todo){
    
   
   confirmBtn.addEventListener("click", saveUpdateTodo);
-
   titleInput.value = todo.title;
-  descriptionInput.value = todo.description || '';
+  dueDateInput.value = todo.dueDate;
+  descriptionInput.value = todo.description || null;
   notesInput.value = todo.notes || '';
 
   dialog.showModal();
