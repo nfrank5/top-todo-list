@@ -36,6 +36,9 @@ function createTodo(title, description, notes){
       get description(){
         return todoDescription;
       }, 
+      get notes(){
+        return todoNotes;
+      }, 
       updateTodo }
 
 };

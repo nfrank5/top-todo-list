@@ -3,6 +3,7 @@ import { createList } from './lists';
 
 
 const initialList = createList('Default list');
+const anotherList = createList('Another list');
 
 // Dummie data
 let leche = initialList.addTodo("comprar leche");
@@ -13,7 +14,7 @@ agua.updateTodo("comprar agua","En el almacen","")
 
 
 
-const createdLists = [initialList];
+const createdLists = [initialList, anotherList];
 
 function cleanTable(){
   document.querySelector('.listTable').innerHTML = '';
@@ -41,52 +42,59 @@ function displayList(list){
     let detailsButton = document.createElement("BUTTON");
     detailsButton.textContent = 'Details';
     detailsButton.dataset.id = index;
-    detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo, index));
+    detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo));
 
     const row = tableList.insertRow(-1);
 
     let cell1 = row.insertCell(0);
     let cell2 = row.insertCell(1);
-    let cell3 = row.insertCell(2);
 
     cell1.innerHTML = todo.title;
-    cell2.innerHTML = todo.description;
-    cell3.appendChild(detailsButton);
+    cell2.appendChild(detailsButton);
 
   });
   document.body.appendChild(listDiv);
 
 }
 
-function displayTodoDetails(list, todo, index, ...rest){
+function displayTodoDetails(list, todo){
 
   let dialog = document.querySelector("dialog");
   let confirmBtn = dialog.querySelector(".confirmBtn");
   let titleInput = dialog.querySelector("#title");
   let descriptionInput = dialog.querySelector("#description");
   let notesInput = dialog.querySelector("#notes");
-  let closeBtn = dialog.querySelector(".close");
-  let form = dialog.querySelector('form');
+  //let closeBtn = dialog.querySelector(".close");
+  //let form = dialog.querySelector('form');
   
 
   function saveUpdateTodo(e){
-    todo.updateTodo(titleInput.value, descriptionInput.value,notesInput.value )
+    todo.updateTodo(titleInput.value, descriptionInput.value, notesInput.value )
     e.preventDefault();
     dialog.close();
     displayList(list);
   }
 
   dialog.addEventListener("close", (e) => {
-    confirmBtn.removeEventListener("click", saveUpdateTodo, { once: true }) //Remove listener to delete previous events
+    confirmBtn.removeEventListener("click", saveUpdateTodo) //Remove listener to delete previous events
   });
+   
   
-  confirmBtn.addEventListener("click", saveUpdateTodo, { once: true });
+  confirmBtn.addEventListener("click", saveUpdateTodo);
 
   titleInput.value = todo.title;
   descriptionInput.value = todo.description || '';
   notesInput.value = todo.notes || '';
 
   dialog.showModal();
+}
+
+function showListsTitles(lists){
+  
+  lists.forEach(function(list){
+    console.log(list.title)
+  });
+  
 }
 
 
@@ -96,11 +104,11 @@ function screenEventHandler(){
   createListButton.textContent = 'Create New List';
   document.body.appendChild(createListButton);
 
-  createdLists.forEach(list => {
-    displayList(list);
-  });
 
-  
+  showListsTitles(createdLists);
+
+  displayList(initialList);
+
 
   return {}
 }
