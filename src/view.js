@@ -1,47 +1,61 @@
 import { createList } from './lists';
-import { format } from "date-fns";
-
+import { createTodo } from './todos';
 
 const initialList = createList('Default list');
-const anotherList = createList('Another list');
+
 
 // Dummie data
-let leche = initialList.addTodo("comprar leche");
-leche.updateTodo("comprar leche",new Date(2014, 1, 11), "En el kiosco de le esquina", "" )
-initialList.addTodo("comprar pan");
-let agua = initialList.addTodo("comprar agua");
+const anotherList = createList('Another list');
+let leche = createTodo("comprar leche")
+initialList.addTodo(leche);
+leche.updateTodo("comprar leche",new Date(2024, 1, 11), "En el kiosco de le esquina", "" )
+let pan = createTodo("comprar pan")
+initialList.addTodo(pan);
+let agua = createTodo("comprar agua")
+initialList.addTodo(agua);
 agua.updateTodo("comprar agua","En el almacen","","")
 
 
 
 const createdLists = [initialList, anotherList];
 
+
+const dialog = document.querySelector("dialog");
+const confirmBtn = dialog.querySelector(".confirmBtn");
+const titleInput = dialog.querySelector("#title");
+const dueDateInput = dialog.querySelector("#dueDate")
+const descriptionInput = dialog.querySelector("#description");
+const notesInput = dialog.querySelector("#notes");
+const closeBtn = dialog.querySelector(".close");
+const listDiv = document.querySelector('.listTable');
+
+
 function cleanTable(){
-  document.querySelector('.listTable').innerHTML = '';
-
+  listDiv.innerHTML = '';
 }
-
 
 function displayList(list){
   const todos = list.getTodos()
-  cleanTable();
   const tableList = document.createElement('table');
   const listheader = document.createElement('h2');
-  const createTodoButton = document.createElement('button');
+  const createNewTaskButton = document.createElement('button');
+  listheader.innerHTML = `${list.title}`;
+  createNewTaskButton.textContent = 'Create New Task';
+  createNewTaskButton.addEventListener("click", (e) => {
+    const newTodo = createTodo();
+    newTodo.source = 'createNewTaskButton'
+    displayTodoDetails(list, newTodo);
+  });
 
-  const listDiv = document.querySelector('.listTable');
+  cleanTable();
 
   listDiv.appendChild(listheader);
   listDiv.appendChild(tableList);
-  listDiv.appendChild(createTodoButton);
+  listDiv.appendChild(createNewTaskButton);
   
-  createTodoButton.textContent = 'Create New Task';
-  listheader.innerHTML = `${list.title}`;
-
   todos.forEach((todo, index)=> {
     let detailsButton = document.createElement("BUTTON");
     detailsButton.textContent = 'Details';
-    detailsButton.dataset.id = index;
     detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo));
 
     const row = tableList.insertRow(-1);
@@ -51,68 +65,74 @@ function displayList(list){
 
     cell1.innerHTML = todo.title;
     cell2.appendChild(detailsButton);
-
   });
   document.body.appendChild(listDiv);
-
 }
 
 function displayTodoDetails(list, todo){
 
-  let dialog = document.querySelector("dialog");
-  let confirmBtn = dialog.querySelector(".confirmBtn");
-  let titleInput = dialog.querySelector("#title");
-  let dueDateInput = dialog.querySelector("#dueDate")
-  let descriptionInput = dialog.querySelector("#description");
-  let notesInput = dialog.querySelector("#notes");
-  //let closeBtn = dialog.querySelector(".close");
-  //let form = dialog.querySelector('form');
-  
+
+
+  dialog.addEventListener("close", (e) => {
+    confirmBtn.removeEventListener("click", saveUpdateTodo) //Remove listener to delete previous events
+  });
+     
+  closeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    dialog.close();
+  })
+  confirmBtn.addEventListener("click", saveUpdateTodo);
 
   function saveUpdateTodo(e){
-    todo.updateTodo(titleInput.value, new Date(dueDateInput.value), descriptionInput.value, notesInput.value )
+    console.log(todo.source)
+    let date;
+    if(dueDateInput.value.length > 0){
+      date = new Date(dueDateInput.value)
+    }else{
+      date = dueDateInput.value;
+    }
+    if (todo.source === 'createNewTaskButton'){
+      list.addTodo(todo);
+      delete todo.source
+    }
+    todo.updateTodo(titleInput.value, date, descriptionInput.value, notesInput.value )
     e.preventDefault();
     dialog.close();
     displayList(list);
   }
 
-  dialog.addEventListener("close", (e) => {
-    confirmBtn.removeEventListener("click", saveUpdateTodo) //Remove listener to delete previous events
-  });
-   
-  
-  confirmBtn.addEventListener("click", saveUpdateTodo);
-  titleInput.value = todo.title;
-  dueDateInput.value = todo.dueDate;
-  descriptionInput.value = todo.description || null;
+  titleInput.value = todo.title || '';
+  dueDateInput.value = todo.dueDate || '';
+  descriptionInput.value = todo.description || '';
   notesInput.value = todo.notes || '';
 
   dialog.showModal();
 }
 
 function showListsTitles(lists){
-  
   lists.forEach(function(list){
     console.log(list.title)
-  });
-  
+  }); 
+}
+
+function attachListeners(){
+
+
 }
 
 
-function screenEventHandler(){
+
+
+const screenEventHandler = (function (){
 
   const createListButton = document.createElement('button');
   createListButton.textContent = 'Create New List';
   document.body.appendChild(createListButton);
-
-
   showListsTitles(createdLists);
-
   displayList(initialList);
-
-
   return {}
-}
+
+})();
 
 
 

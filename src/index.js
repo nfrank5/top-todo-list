@@ -9,4 +9,3 @@ import { screenEventHandler } from './view';
 //element.appendChild(myIcon);
 
 
-screenEventHandler();

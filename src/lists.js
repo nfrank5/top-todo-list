@@ -9,8 +9,7 @@ function createList(title){
   const decreasePosition = function(){ position-- };
   const getPosition = function(){ return position };
 
-  const addTodo = function(title){
-    const todo = createTodo(title)
+  const addTodo = function(todo = createTodo()){
     todos.push(todo);
     return todo
   }
