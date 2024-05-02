@@ -7,6 +7,13 @@
 <script defer src="bundle.js"></script></head>
 <body>
   <h1>To do Lists - TOP</h1>
+  <button id="create-new-list">Create New Lists</button>
+  <div class="createListInput" style="display: none;">
+    <label for="newList">New List Name:</label>
+    <input type="text" id="newList" />
+    <button id="apply">Apply</button>
+  </div>
+  <div class="list-selection"></div>
   <dialog>
     <p>Task Details</p>
     <form>
@@ -35,5 +42,6 @@
     </div>
   </dialog>
   <div class="listTable"></div>
+  
 </body>
 </html>
