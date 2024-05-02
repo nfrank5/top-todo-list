@@ -71,20 +71,9 @@ function displayList(list){
 
 function displayTodoDetails(list, todo){
 
-
-
-  dialog.addEventListener("close", (e) => {
-    confirmBtn.removeEventListener("click", saveUpdateTodo) //Remove listener to delete previous events
-  });
-     
-  closeBtn.addEventListener("click", (e) => {
-    e.preventDefault();
-    dialog.close();
-  })
-  confirmBtn.addEventListener("click", saveUpdateTodo);
+  attachListenersTodoDetails(saveUpdateTodo);
 
   function saveUpdateTodo(e){
-    console.log(todo.source)
     let date;
     if(dueDateInput.value.length > 0){
       date = new Date(dueDateInput.value)
@@ -115,9 +104,16 @@ function showListsTitles(lists){
   }); 
 }
 
-function attachListeners(){
-
-
+function attachListenersTodoDetails(saveUpdateTodo){
+  dialog.addEventListener("close", (e) => {
+    confirmBtn.removeEventListener("click", saveUpdateTodo) //Remove listener to delete previous events
+  });
+     
+  closeBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    dialog.close();
+  })
+  confirmBtn.addEventListener("click", saveUpdateTodo);
 }
 
 
