@@ -28,7 +28,14 @@ const descriptionInput = dialog.querySelector("#description");
 const notesInput = dialog.querySelector("#notes");
 const closeBtn = dialog.querySelector(".close");
 const listDiv = document.querySelector('.listTable');
+const listSelectionDiv = document.querySelector(".list-selection");
+const inputNewList = document.querySelector("#newList");
+const displayCreateNewListButton = document.querySelector("#create-new-list");
+const createListInputDiv = document.querySelector(".createListInput")
+const applyButton = document.querySelector("#apply")
 
+displayCreateNewListButton.addEventListener("click", toggleCreateNewList);
+applyButton.addEventListener("click", createNewList)
 
 function cleanTable(){
   listDiv.innerHTML = '';
@@ -101,6 +108,10 @@ function displayTodoDetails(list, todo){
 function showListsTitles(lists){
   lists.forEach(function(list){
     console.log(list.title)
+    let listTitle = document.createElement("button");
+    listTitle.textContent = list.title;
+    listTitle.addEventListener('click', displayList.bind(null, list));
+    listSelectionDiv.appendChild(listTitle);
   }); 
 }
 
@@ -116,14 +127,26 @@ function attachListenersTodoDetails(saveUpdateTodo){
   confirmBtn.addEventListener("click", saveUpdateTodo);
 }
 
+function toggleCreateNewList(){
+  if(createListInputDiv.style.display === 'unset'){
+    displayCreateNewListButton.textContent = "Create New Lists"
 
+    createListInputDiv.style.display = 'none'
+  } else {
+    displayCreateNewListButton.textContent = "Hide Create New Lists Field"
+    createListInputDiv.style.display = 'unset'
+  }
+}
 
+function createNewList(){
+  createdLists.push(createList(inputNewList.value));
+  inputNewList.value = "";
+  listSelectionDiv.innerHTML = '';
+  showListsTitles(createdLists);
+}
 
 const screenEventHandler = (function (){
 
-  const createListButton = document.createElement('button');
-  createListButton.textContent = 'Create New List';
-  document.body.appendChild(createListButton);
   showListsTitles(createdLists);
   displayList(initialList);
   return {}
