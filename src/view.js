@@ -10,15 +10,18 @@ let leche = createTodo("comprar leche")
 initialList.addTodo(leche);
 leche.updateTodo("comprar leche",new Date(2024, 1, 11), "En el kiosco de le esquina", "" )
 let pan = createTodo("comprar pan")
+pan.incresePriority()
+pan.incresePriority()
 initialList.addTodo(pan);
 let agua = createTodo("comprar agua")
+agua.incresePriority()
 initialList.addTodo(agua);
 agua.updateTodo("comprar agua","En el almacen","","")
 
 
 
-const createdLists = [initialList, anotherList];
-
+const createdLists = [initialList];
+const PRIORITIES = {0:"low-priority", 1:"medium-priority", 2:"high-priority"}
 
 const dialog = document.querySelector("dialog");
 const confirmBtn = dialog.querySelector(".confirmBtn");
@@ -33,9 +36,12 @@ const inputNewList = document.querySelector("#newList");
 const displayCreateNewListButton = document.querySelector("#create-new-list");
 const createListInputDiv = document.querySelector(".createListInput")
 const applyButton = document.querySelector("#apply")
+const priority = document.querySelector("#priority")
 
 displayCreateNewListButton.addEventListener("click", toggleCreateNewList);
 applyButton.addEventListener("click", createNewList)
+//priority.addEventListener("change", () =>{ console.log(priority.value)})
+
 
 function cleanTable(){
   listDiv.innerHTML = '';
@@ -61,20 +67,26 @@ function displayList(list){
   listDiv.appendChild(createNewTaskButton);
   
   todos.forEach((todo, index)=> {
-    let detailsButton = document.createElement("BUTTON");
+    let detailsButton = document.createElement("button");
     detailsButton.textContent = 'Details';
     detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo));
 
+    //console.log(priorityDot.classList)
+    
     const row = tableList.insertRow(-1);
 
     let cell1 = row.insertCell(0);
     let cell2 = row.insertCell(1);
+    let cell3 = row.insertCell(2);
 
-    cell1.innerHTML = todo.title;
+    cell1.textContent = todo.title;
     cell2.appendChild(detailsButton);
+    cell3.appendChild(createPriorityDot(todo));
   });
   document.body.appendChild(listDiv);
 }
+
+
 
 function displayTodoDetails(list, todo){
 
@@ -91,7 +103,7 @@ function displayTodoDetails(list, todo){
       list.addTodo(todo);
       delete todo.source
     }
-    todo.updateTodo(titleInput.value, date, descriptionInput.value, notesInput.value )
+    todo.updateTodo(titleInput.value, date, descriptionInput.value, notesInput.value, priority.value )
     e.preventDefault();
     dialog.close();
     displayList(list);
@@ -101,8 +113,15 @@ function displayTodoDetails(list, todo){
   dueDateInput.value = todo.dueDate || '';
   descriptionInput.value = todo.description || '';
   notesInput.value = todo.notes || '';
+  priority.value = todo.priority;
 
   dialog.showModal();
+}
+
+function createPriorityDot(todo){
+  let priorityDot = document.createElement("div");
+  priorityDot.classList.add(PRIORITIES[todo.priority], 'priority-dot');
+  return priorityDot
 }
 
 function showListsTitles(lists){

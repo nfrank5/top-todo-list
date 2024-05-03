@@ -33,6 +33,15 @@
         <li>
           <label for="notes">Notes:</label>
           <input type="text" id="notes" />
+        </li>  
+        <li>
+          <label for="priority">Priority:</label>
+          <input type="range" id="priority" min="0" max="2" value="0" list="markers"/>
+          <datalist id="markers">
+            <option value="0" label="Low"></option>
+            <option value="1" label="Medium"></option>
+            <option value="2" label="High"></option>
+          </datalist>
         </li>        
     </ul>
     </form>
@@ -40,8 +49,9 @@
       <button class="close" value="cancel">Cancel</button>
       <button class="confirmBtn" value="default">Confirm</button>
     </div>
+
   </dialog>
   <div class="listTable"></div>
-  
+
 </body>
 </html>
