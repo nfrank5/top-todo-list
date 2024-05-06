@@ -1,26 +1,49 @@
 import { createList } from './lists';
 import { createTodo } from './todos';
 
-const initialList = createList('Default list');
+let initialList = createList('Default list');
+let createdLists = [initialList];
 
+/* if (!localStorage.getItem("data")) {
+  populateStorage();
+} else {
+  setInitialLists();
+}
+ */
+let asd = document.querySelector("#asd")
+asd.addEventListener("click", populateStorage);
+let zxc = document.querySelector("#zxc")
+zxc.addEventListener("click", setInitialLists);
 
-// Dummie data
-const anotherList = createList('Another list');
-let leche = createTodo("comprar leche")
-initialList.addTodo(leche);
-leche.updateTodo("comprar leche",new Date(2024, 1, 11), "En el kiosco de le esquina", "" )
-let pan = createTodo("comprar pan")
-pan.incresePriority()
-pan.incresePriority()
-initialList.addTodo(pan);
-let agua = createTodo("comprar agua")
-agua.incresePriority()
-initialList.addTodo(agua);
-agua.updateTodo("comprar agua","En el almacen","","")
+function populateStorage(){
+  console.log(1)
+  localStorage.removeItem("data");
+  localStorage.setItem("data", JSON.stringify(createdLists));
 
+}
 
+function setInitialLists(){
+  console.log(2)
 
-const createdLists = [initialList];
+  let data = JSON.parse(localStorage.getItem("data"))
+  createdLists = []
+  data.forEach((l) => {
+    const newList = createList(l.title)
+    l.todos.forEach((t) => {
+      let date;
+      if(typeof t.dueDate != undefined ){
+        date = new Date(t.dueDate);
+      } else {
+        ""; 
+      }
+      newList.addTodo(createTodo(t.title, t.description, t.notes, date, t.priority)) 
+    })
+    createdLists.push(newList);
+  })
+  showListsTitles(createdLists);
+  displayList(createdLists[0]);
+}
+
 const PRIORITIES = {0:"low-priority", 1:"medium-priority", 2:"high-priority"}
 
 const dialog = document.querySelector("dialog");
@@ -52,8 +75,12 @@ function displayList(list){
   const tableList = document.createElement('table');
   const listheader = document.createElement('h2');
   const createNewTaskButton = document.createElement('button');
-  listheader.innerHTML = `${list.title}`;
+
+  listheader.innerText = `Selected List: ${list.title}`;
+  listheader.classList.add("listHeader");
   createNewTaskButton.textContent = 'Create New Task';
+  createNewTaskButton.classList.add("createNewTaskButton");
+
   createNewTaskButton.addEventListener("click", (e) => {
     const newTodo = createTodo();
     newTodo.source = 'createNewTaskButton'
@@ -67,7 +94,12 @@ function displayList(list){
   listDiv.appendChild(createNewTaskButton);
   
   todos.forEach((todo, index)=> {
-    let detailsButton = document.createElement("button");
+    const deleteTaskButton = document.createElement("button");
+    deleteTaskButton.innerText = "X"
+    deleteTaskButton.addEventListener("click", deleteTask.bind(null, list, todo))
+
+
+    const detailsButton = document.createElement("button");
     detailsButton.textContent = 'Details';
     detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo));
 
@@ -78,10 +110,12 @@ function displayList(list){
     let cell1 = row.insertCell(0);
     let cell2 = row.insertCell(1);
     let cell3 = row.insertCell(2);
+    let cell4 = row.insertCell(3);
 
     cell1.textContent = todo.title;
     cell2.appendChild(detailsButton);
     cell3.appendChild(createPriorityDot(todo));
+    cell4.appendChild(deleteTaskButton);
   });
   document.body.appendChild(listDiv);
 }
@@ -125,8 +159,8 @@ function createPriorityDot(todo){
 }
 
 function showListsTitles(lists){
+  listSelectionDiv.innerHTML = '';
   lists.forEach(function(list){
-    console.log(list.title)
     let listTitle = document.createElement("button");
     listTitle.textContent = list.title;
     listTitle.addEventListener('click', displayList.bind(null, list));
@@ -146,13 +180,19 @@ function attachListenersTodoDetails(saveUpdateTodo){
   confirmBtn.addEventListener("click", saveUpdateTodo);
 }
 
+function deleteTask(list, todo){
+  list.getTodos().forEach((t,index) => {
+    if(t===todo){
+      list.getTodos().splice(index, 1);
+    }
+  })
+  displayList(list);
+}
+
 function toggleCreateNewList(){
   if(createListInputDiv.style.display === 'unset'){
-    displayCreateNewListButton.textContent = "Create New Lists"
-
     createListInputDiv.style.display = 'none'
   } else {
-    displayCreateNewListButton.textContent = "Hide Create New Lists Field"
     createListInputDiv.style.display = 'unset'
   }
 }
@@ -161,6 +201,7 @@ function createNewList(){
   createdLists.push(createList(inputNewList.value));
   inputNewList.value = "";
   listSelectionDiv.innerHTML = '';
+  toggleCreateNewList();
   showListsTitles(createdLists);
 }
 

@@ -1,20 +1,15 @@
 import { createTodo } from './todos';
 
-function createList(title){
+function createList(title, todos = []){
   let listTitle = title
-  let position = 0;
-  let todos = [];
-
-  const incresePosition = function(){ position++ };
-  const decreasePosition = function(){ position-- };
-  const getPosition = function(){ return position };
+  let listTodos = todos;
 
   const addTodo = function(todo = createTodo()){
-    todos.push(todo);
+    listTodos.push(todo);
     return todo
   }
 
-  const getTodos = function(){ return todos  }
+  const getTodos = function(){ return listTodos  }
 
 
   return {       
@@ -24,6 +19,13 @@ function createList(title){
     get title(){
       return listTitle
     }, 
+    set todos(t){        
+      listTodos = t;
+      },
+    get todos(){
+      return listTodos
+    }, 
+
     addTodo, getTodos }
 
 };

@@ -3,21 +3,9 @@ import { format } from "date-fns";
 function createTodo(title, description, notes, dueDate, priority){
   let todoTitle = title;
   let todoDescription = description;
-  let todoDueDate = null;
-  let todoPriority = 0;
+  let todoDueDate = dueDate;
+  let todoPriority = priority;
   let todoNotes = notes;
-  let checklist = '';
-  let activity = [];
-
-  const incresePriority = function(){ 
-    if(todoPriority < 2){
-      todoPriority++
-    }
-  };
-  const decreasePriority = function(){ if(todoPriority > 0){
-    todoPriority-- }
-  };
-  
 
 
   const updateTodo = function(title, dueDate, description, notes, priority ){
@@ -29,7 +17,9 @@ function createTodo(title, description, notes, dueDate, priority){
   };
 
   return { 
-    todoTitle,
+      set dueDate(d){        
+        todoDueDate = d;
+      },
       set title(text){        
         todoTitle = text;
       },
@@ -48,12 +38,11 @@ function createTodo(title, description, notes, dueDate, priority){
         } else {
           ""; 
         }
-        
       },
       get priority(){
         return todoPriority;
       }, 
-      updateTodo, incresePriority, decreasePriority 
+      updateTodo
   }
 };
 

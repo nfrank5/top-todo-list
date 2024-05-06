@@ -3,55 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To do Lists - TOP</title>
+  <title>To do Lists App. TOP</title>
 </head>
 <body>
-  <h1>To do Lists - TOP</h1>
-  <button id="create-new-list">Create New Lists</button>
-  <div class="createListInput" style="display: none;">
-    <label for="newList">New List Name:</label>
-    <input type="text" id="newList" />
-    <button id="apply">Apply</button>
-  </div>
-  <div class="list-selection"></div>
-  <dialog>
-    <p>Task Details</p>
-    <form>
-      <ul>
-        <li>
-          <label for="title">Title:</label>
-          <input type="text" id="title"/> *
-        </li>
-        <li>
-          <label for="dueDate">Due date:</label>
-          <input type="date" id="dueDate" />
-        </li>
-        <li>
-          <label for="description">Description:</label>
-          <input type="text" id="description" />
-        </li>
-        <li>
-          <label for="notes">Notes:</label>
-          <input type="text" id="notes" />
-        </li>  
-        <li>
-          <label for="priority">Priority:</label>
-          <input type="range" id="priority" min="0" max="2" value="0" list="markers"/>
-          <datalist id="markers">
-            <option value="0" label="Low"></option>
-            <option value="1" label="Medium"></option>
-            <option value="2" label="High"></option>
-          </datalist>
-        </li>        
-    </ul>
-    </form>
-    <div>
-      <button class="close" value="cancel">Cancel</button>
-      <button class="confirmBtn" value="default">Confirm</button>
+  <header>
+    <h1>To do Lists App. TOP</h1>
+    <button id="create-new-list">Create New List</button>
+    <div class="createListInput" style="display: none;">
+      <label for="newList">New List Name:</label>
+      <input type="text" id="newList" />
+      <button id="apply">Apply</button>
     </div>
+  </header>
+  <main>
+    <p>Select a List to display: </p>
+    <div class="list-selection"></div>
+    <dialog>
+      <p>Task Details</p>
+      <form>
+        <ul>
+          <li>
+            <label for="title">Title:</label>
+            <input type="text" id="title"/> *
+          </li>
+          <li>
+            <label for="dueDate">Due date:</label>
+            <input type="date" id="dueDate" />
+          </li>
+          <li>
+            <label for="description">Description:</label>
+            <input type="text" id="description" />
+          </li>
+          <li>
+            <label for="notes">Notes: </label><br>
+            <textarea id="notes"></textarea>
+          </li>
+          <li>
+            <label for="priority">Priority:</label>
+            <input type="range" id="priority" min="0" max="2" value="0" list="markers"/>
+            <datalist id="markers">
+              <option value="0" label="Low"></option>
+              <option value="1" label="Medium"></option>
+              <option value="2" label="High"></option>
+            </datalist>
+          </li>
+      </ul>
+      </form>
+      <div>
+        <button class="close" value="cancel">Cancel</button>
+        <button class="confirmBtn" value="default">Confirm</button>
+      </div>
+    </dialog>
+    <div class="listTable"></div>
 
-  </dialog>
-  <div class="listTable"></div>
-
+  </main>
+  <footer>
+    <div id="asd"> ASD</div>
+    <div id="zxc"> ZXC</div>
+    
+  </footer>
 </body>
 </html>

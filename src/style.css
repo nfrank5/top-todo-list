@@ -1,34 +1,74 @@
-body {
+main {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 1px black solid;
+  border-radius: 5px;
 }
 
 h1 {
   align-self: center;
 }
 
+#create-new-list{
+  align-self: center;
+  width: 20rem;
+  margin: 0.5rem;
+}
+.listHeader{
+  text-align: center;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 0.5rem;
+}
+
+.listTable{
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.list-selection{
+
+  align-self: center;
+  margin: 1rem;
+}
+
+.createNewTaskButton{
+  align-self: center;
+  margin: 1rem;
+}
 
 .high-priority {
   background-color: red;
 }
 
 .low-priority {
-  background-color: green;
+  background-color: rgb(89, 160, 89);
 }
 
 .medium-priority {
-  background-color: yellow;
+  background-color: rgb(255, 217, 0);
 }
 
 .priority-dot {
-  width: 10px;
-  height: 10px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   transition: background-color 0.5s ease; 
   border: 1px solid;
 }
 
+.createListInput{
+  align-self: center;
+  margin: 0.2rem;
+}
 
 datalist {
   display: flex;
