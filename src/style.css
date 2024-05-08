@@ -3,12 +3,12 @@ main {
   flex-direction: column;
   justify-content: center;
 }
-p {
+p, h1 {
   text-align: center;
+  margin:1px;
 }
 
 body{
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
@@ -37,33 +37,40 @@ h1 {
   align-self: center;
 }
 
-#create-new-list{
-  align-self: center;
-  width: 20rem;
-  margin: 1px;
-}
+
+
 .listHeader{
+  display: flex;
   text-align: center;
   border-radius: 5px;
   border: 1px solid black;
-  padding: 10px;
+  padding: 5px;
+
+}
+
+button {
+  margin: 1px;
+}
+
+.deleteListButton {
+  margin-left: 10px;
 }
 
 .listTable{
   display: flex;
   flex-direction: column;
   align-self: center;
+  
 }
 
 .list-selection{
-
   align-self: center;
-  margin: 10px;
+  margin: 1px;
 }
 
 .createNewTaskButton{
   align-self: center;
-  margin: 1rem;
+  margin: 1px;
 }
 
 .high-priority {

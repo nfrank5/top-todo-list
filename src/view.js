@@ -4,14 +4,6 @@ import { saveToStorage, setInitialLists } from './storage';
 
 let initialList = createList('Default list');
 let createdLists = [initialList];
-
-
-
-
-
-
-
-
 const PRIORITIES = {0:"low-priority", 1:"medium-priority", 2:"high-priority"}
 
 const dialog = document.querySelector("dialog");
@@ -29,70 +21,75 @@ const applyButton = document.querySelector("#apply")
 const priority = document.querySelector("#priority")
 
 applyButton.addEventListener("click", createNewList)
-//priority.addEventListener("change", () =>{ console.log(priority.value)})
-
 
 function cleanTable(){
   listDiv.innerHTML = '';
 }
 
-function displayList(list){
-  const todos = list.getTodos()
-  const tableList = document.createElement('table');
-  const listheader = document.createElement('h2');
-  const createNewTaskButton = document.createElement('button');
-
-
-  listheader.innerText = `${list.title}`;
-  listheader.classList.add("listHeader");
-  createNewTaskButton.textContent = 'Create New Task';
-  createNewTaskButton.classList.add("createNewTaskButton");
-
-  createNewTaskButton.addEventListener("click", (e) => {
-    const newTodo = createTodo();
-    newTodo.source = 'createNewTaskButton'
-    displayTodoDetails(list, newTodo);
-  });
-
-  cleanTable();
-
-  listDiv.appendChild(listheader);
-  listDiv.appendChild(tableList);
-  listDiv.appendChild(createNewTaskButton);
-  
-  todos.forEach((todo, index)=> {
-    const deleteTaskButton = document.createElement("button");
-    deleteTaskButton.innerText = "X"
-    deleteTaskButton.addEventListener("click", deleteTask.bind(null, list, todo))
-
-
-    const detailsButton = document.createElement("button");
-    detailsButton.textContent = 'Details';
-    detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo));
-
-    //console.log(priorityDot.classList)
+function displayList(list, index = null){
+  if(list!= undefined){
+    const todos = list.getTodos()
+    const tableList = document.createElement('table');
+    const listheader = document.createElement('h2');
+    const deleteListButton = document.createElement('button')
+    const createNewTaskButton = document.createElement('button');
     
-    const row = tableList.insertRow(-1);
 
-    let cell1 = row.insertCell(0);
-    let cell2 = row.insertCell(1);
-    let cell3 = row.insertCell(2);
-    let cell4 = row.insertCell(3);
+    deleteListButton.textContent = "Delete";
+    deleteListButton.classList.add("deleteListButton")
+    listheader.innerText = `${list.title}`;
+    listheader.appendChild(deleteListButton);
+    listheader.classList.add("listHeader");
+    createNewTaskButton.textContent = 'Create New Task';
+    createNewTaskButton.classList.add("createNewTaskButton");
 
-    cell1.textContent = todo.title;
-    cell2.appendChild(detailsButton);
-    cell3.appendChild(createPriorityDot(todo));
-    cell4.appendChild(deleteTaskButton);
-  });
-  document.body.appendChild(listDiv);
+    createNewTaskButton.addEventListener("click", (e) => {
+      const newTodo = createTodo();
+      newTodo.source = 'createNewTaskButton'
+      displayTodoDetails(list, newTodo);
+    });
+
+    deleteListButton.addEventListener("click", ()=> {
+      createdLists.splice(index, 1);
+      displayList(createdLists[0])
+      showListsTitles(createdLists);
+      saveToStorage(createdLists);
+    })
+
+    cleanTable();
+    listDiv.appendChild(listheader);
+    listDiv.appendChild(tableList);
+    listDiv.appendChild(createNewTaskButton);
+    
+    todos.forEach((todo, index)=> {
+      const deleteTaskButton = document.createElement("button");
+      deleteTaskButton.innerText = "X"
+      deleteTaskButton.addEventListener("click", deleteTask.bind(null, list, todo))
+
+      const detailsButton = document.createElement("button");
+      detailsButton.textContent = 'Details';
+      detailsButton.addEventListener('click', displayTodoDetails.bind(null, list, todo));
+      
+      const row = tableList.insertRow(-1);
+
+      let cell1 = row.insertCell(0);
+      let cell2 = row.insertCell(1);
+      let cell3 = row.insertCell(2);
+      let cell4 = row.insertCell(3);
+
+      cell1.textContent = todo.title;
+      cell2.appendChild(detailsButton);
+      cell3.appendChild(createPriorityDot(todo));
+      cell4.appendChild(deleteTaskButton);
+    });
+    document.body.appendChild(listDiv);
+  } else {
+    cleanTable();
+  }
 }
 
-
-
 function displayTodoDetails(list, todo){
-
   attachListenersTodoDetails(saveUpdateTodo);
-
   function saveUpdateTodo(e){
     let date;
     if(dueDateInput.value.length > 0){
@@ -107,7 +104,6 @@ function displayTodoDetails(list, todo){
     dialog.close();
     displayList(list);
     saveToStorage(createdLists);
-
   }
 
   titleInput.value = todo.title || '';
@@ -115,7 +111,6 @@ function displayTodoDetails(list, todo){
   descriptionInput.value = todo.description || '';
   notesInput.value = todo.notes || '';
   priority.value = todo.priority;
-
   dialog.showModal();
 }
 
@@ -127,10 +122,10 @@ function createPriorityDot(todo){
 
 function showListsTitles(lists){
   listSelectionDiv.innerHTML = '';
-  lists.forEach(function(list){
+  lists.forEach(function(list, index){
     let listTitle = document.createElement("button");
     listTitle.textContent = list.title;
-    listTitle.addEventListener('click', displayList.bind(null, list));
+    listTitle.addEventListener('click', displayList.bind(null, list, index));
     listSelectionDiv.appendChild(listTitle);
   }); 
 }
@@ -157,8 +152,6 @@ function deleteTask(list, todo){
   saveToStorage(createdLists);
 }
 
-
-
 function createNewList(){
   createdLists.push(createList(inputNewList.value));
   inputNewList.value = "";
@@ -176,11 +169,7 @@ const screenEventHandler = (function (){
     showListsTitles(createdLists);
     displayList(createdLists[0]);
   }
-  
   return {}
-
 })();
-
-
 
 export { screenEventHandler };
