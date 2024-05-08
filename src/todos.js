@@ -33,10 +33,10 @@ function createTodo(title, description, notes, dueDate, priority){
         return todoNotes;
       }, 
       get dueDate(){
-        if(todoDueDate instanceof Date){
+        if(todoDueDate instanceof Date && !isNaN(todoDueDate)){
           return format(todoDueDate, 'yyyy-MM-dd');
         } else {
-          ""; 
+          return undefined; 
         }
       },
       get priority(){

@@ -1,48 +1,16 @@
 import { createList } from './lists';
 import { createTodo } from './todos';
+import { saveToStorage, setInitialLists } from './storage';
 
 let initialList = createList('Default list');
 let createdLists = [initialList];
 
-/* if (!localStorage.getItem("data")) {
-  populateStorage();
-} else {
-  setInitialLists();
-}
- */
-let asd = document.querySelector("#asd")
-asd.addEventListener("click", populateStorage);
-let zxc = document.querySelector("#zxc")
-zxc.addEventListener("click", setInitialLists);
 
-function populateStorage(){
-  console.log(1)
-  localStorage.removeItem("data");
-  localStorage.setItem("data", JSON.stringify(createdLists));
 
-}
 
-function setInitialLists(){
-  console.log(2)
 
-  let data = JSON.parse(localStorage.getItem("data"))
-  createdLists = []
-  data.forEach((l) => {
-    const newList = createList(l.title)
-    l.todos.forEach((t) => {
-      let date;
-      if(typeof t.dueDate != undefined ){
-        date = new Date(t.dueDate);
-      } else {
-        ""; 
-      }
-      newList.addTodo(createTodo(t.title, t.description, t.notes, date, t.priority)) 
-    })
-    createdLists.push(newList);
-  })
-  showListsTitles(createdLists);
-  displayList(createdLists[0]);
-}
+
+
 
 const PRIORITIES = {0:"low-priority", 1:"medium-priority", 2:"high-priority"}
 
@@ -130,8 +98,6 @@ function displayTodoDetails(list, todo){
     let date;
     if(dueDateInput.value.length > 0){
       date = new Date(dueDateInput.value)
-    }else{
-      date = dueDateInput.value;
     }
     if (todo.source === 'createNewTaskButton'){
       list.addTodo(todo);
@@ -141,6 +107,8 @@ function displayTodoDetails(list, todo){
     e.preventDefault();
     dialog.close();
     displayList(list);
+    saveToStorage(createdLists);
+
   }
 
   titleInput.value = todo.title || '';
@@ -170,7 +138,7 @@ function showListsTitles(lists){
 
 function attachListenersTodoDetails(saveUpdateTodo){
   dialog.addEventListener("close", (e) => {
-    confirmBtn.removeEventListener("click", saveUpdateTodo) //Remove listener to delete previous events
+    confirmBtn.removeEventListener("click", saveUpdateTodo);//Remove listener to delete previous events
   });
      
   closeBtn.addEventListener("click", (e) => {
@@ -187,6 +155,7 @@ function deleteTask(list, todo){
     }
   })
   displayList(list);
+  saveToStorage(createdLists);
 }
 
 function toggleCreateNewList(){
@@ -203,12 +172,19 @@ function createNewList(){
   listSelectionDiv.innerHTML = '';
   toggleCreateNewList();
   showListsTitles(createdLists);
+  saveToStorage(createdLists);
 }
 
 const screenEventHandler = (function (){
-
-  showListsTitles(createdLists);
-  displayList(initialList);
+  if (!localStorage.getItem("data")) {
+    showListsTitles(createdLists);
+    displayList(initialList);
+  } else {
+    createdLists = setInitialLists();
+    showListsTitles(createdLists);
+    displayList(createdLists[0]);
+  }
+  
   return {}
 
 })();
