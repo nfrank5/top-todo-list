@@ -3,21 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>To do Lists App. TOP</title>
+  <title>Things to do:</title>
 <script defer src="bundle.js"></script></head>
 <body>
   <header>
-    <h1>To do Lists App. TOP</h1>
-    <button id="create-new-list">Create New List</button>
-    <div class="createListInput" style="display: none;">
-      <label for="newList">New List Name:</label>
+    <h1>Things to do:</h1>
+    <div class="createListInput" >
+      <label for="newList">Create New List:</label>
       <input type="text" id="newList" />
       <button id="apply">Apply</button>
     </div>
-  </header>
-  <main>
     <p>Select a List to display: </p>
     <div class="list-selection"></div>
+  </header>
+  <main>
+    <div class="listTable"></div>
     <dialog>
       <p>Task Details</p>
       <form>
@@ -48,18 +48,15 @@
             </datalist>
           </li>
       </ul>
-      </form>
       <div>
         <button class="close" value="cancel">Cancel</button>
         <button class="confirmBtn" value="default">Confirm</button>
       </div>
+      </form>
     </dialog>
-    <div class="listTable"></div>
-
   </main>
   <footer>
-
-    
+    <p>To do Lists App. TOP</p>
   </footer>
 </body>
 </html>
