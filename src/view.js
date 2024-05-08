@@ -24,12 +24,10 @@ const closeBtn = dialog.querySelector(".close");
 const listDiv = document.querySelector('.listTable');
 const listSelectionDiv = document.querySelector(".list-selection");
 const inputNewList = document.querySelector("#newList");
-const displayCreateNewListButton = document.querySelector("#create-new-list");
 const createListInputDiv = document.querySelector(".createListInput")
 const applyButton = document.querySelector("#apply")
 const priority = document.querySelector("#priority")
 
-displayCreateNewListButton.addEventListener("click", toggleCreateNewList);
 applyButton.addEventListener("click", createNewList)
 //priority.addEventListener("change", () =>{ console.log(priority.value)})
 
@@ -44,7 +42,8 @@ function displayList(list){
   const listheader = document.createElement('h2');
   const createNewTaskButton = document.createElement('button');
 
-  listheader.innerText = `Selected List: ${list.title}`;
+
+  listheader.innerText = `${list.title}`;
   listheader.classList.add("listHeader");
   createNewTaskButton.textContent = 'Create New Task';
   createNewTaskButton.classList.add("createNewTaskButton");
@@ -158,19 +157,12 @@ function deleteTask(list, todo){
   saveToStorage(createdLists);
 }
 
-function toggleCreateNewList(){
-  if(createListInputDiv.style.display === 'unset'){
-    createListInputDiv.style.display = 'none'
-  } else {
-    createListInputDiv.style.display = 'unset'
-  }
-}
+
 
 function createNewList(){
   createdLists.push(createList(inputNewList.value));
   inputNewList.value = "";
   listSelectionDiv.innerHTML = '';
-  toggleCreateNewList();
   showListsTitles(createdLists);
   saveToStorage(createdLists);
 }
